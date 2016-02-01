@@ -14,15 +14,15 @@ class ViewTemplate {
   public function make($view = NULL, $data = [])
   {
       if(empty($this->_regex)) {
-        return View::make($this->_template.'.'.$view, $data);
+          if(empty($this->_template)) {
+              return View::make($view, $data);
+          } else {
+              return View::make($this->_template.'.'.$view, $data);
+          }
       } else {
-
           $newView = str_replace($this->_regex, $this->_regex . $this->_template . ".", $view);
-
           return View::make($newView, $data);
       }
-
-      
   }
   
   public function init($template, $regex = '')
@@ -31,5 +31,4 @@ class ViewTemplate {
 
       return $this->_template = $template;
   }
-
 }
