@@ -3,8 +3,8 @@
 use View;
 
 class ViewTemplate {
-  
-  protected $_view;
+  protected $_template;
+  protected $_regex;
 
   public function __construct()
   {
@@ -13,12 +13,23 @@ class ViewTemplate {
 
   public function make($view = NULL, $data = [])
   {
-      return View::make($this->_view .'/'. $view, $data);
+      if(empty($this->_regex)) {
+        return View::make($this->_template.'.'.$view, $data);
+      } else {
+
+          $newView = str_replace($this->_regex, $this->_regex . $this->_template . ".", $view);
+
+          return View::make($newView, $data);
+      }
+
+      
   }
   
-  public function init($data)
-  {
-        return $this->_view = $data;
+  public function init($template, $regex = '')
+  { 
+      $this->_regex = $regex;
+
+      return $this->_template = $template;
   }
 
 }
